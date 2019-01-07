@@ -42,6 +42,7 @@ class Greedy(Solver):
         drivers = sorted(self.drivers, key=lambda x: x.getMaximumWorkingMinutes(), reverse=True)
         services = sorted(self.services, key=lambda x: x.getDurationMinutes(), reverse=True)
         for d in drivers:
+            pass
 
 
 
@@ -51,7 +52,7 @@ class Greedy(Solver):
         return True
 
     def validDriverCandidate(self, service, driver):
-        if service.getDurationMinutes() > driver.getMaximumWorkingMinutes()
+        if service.getDurationMinutes() > driver.getMaximumWorkingMinutes():
             return False
         return True
 
@@ -60,5 +61,5 @@ class Greedy(Solver):
 
 
     def solveDrivers(self, driverCandidates):
-
+        pass
 

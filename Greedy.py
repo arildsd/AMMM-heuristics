@@ -53,7 +53,7 @@ class Greedy(Solver):
 
         # Assign drivers to services
         for service in sortedServices:
-            for driver in sortedBuses:
+            for driver in sortedDrivers:
                 if self.checkDriverAssignment(service, driver):
                     service.assignDriver(driver.getId())
                     driver.appendService(service)

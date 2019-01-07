@@ -1,0 +1,31 @@
+# file name: instances/instance.dat
+instancesDirectory = instances;
+fileNamePrefix = instance0.8;
+fileNameExtension = dat;
+numInstances = 1;
+
+numServices = 60;
+minNumPassengersPerService = 1;
+maxNumPassengersPerService = 4;
+earliestTimeStart = 100;
+latestTimeStart = 200;
+minDurationMinutes = 5;
+maxDurationMinutes = 200;
+minDurationKm = 1;
+maxDurationKm = 100;
+
+numBuses = 100;
+minCapacityPerBus = 1;
+maxCapacityPerBus = 4;
+minEurosPerMin = 10;
+maxEurosPerMin = 15;
+minEurosPerKm = 10;
+maxEurosPerKm = 12;
+maxBuses = 70;
+
+numDrivers = 100;
+minHighestNumberOfMinutesPerDriver = 30;
+maxHighestNumberOfMinutesPerDriver = 100;
+CBM = 10;
+CEM = 15;
+BM = 100;

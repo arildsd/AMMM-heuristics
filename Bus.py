@@ -4,6 +4,7 @@ class Bus(object):
         self._capacity = capacity
         self._eurosPerMinute = eurosPerMinute
         self._eurosPerKm = eurosPerKm
+        self._servicesAssigned = []
 
     def getId(self):
         return (self._busId)
@@ -16,3 +17,9 @@ class Bus(object):
 
     def getEurosPerKm(self):
         return (self._eurosPerKm)
+
+    def appendService(self, service):
+        self._servicesAssigned.append(service)
+
+    def getServicesAssigned(self):
+        return self._servicesAssigned

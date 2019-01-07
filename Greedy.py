@@ -17,6 +17,17 @@ class Greedy(Solver):
         self.assignedBus = []
         self.overlapping_dict = self.computeOverlapping()
 
+    def switch_bus(self, service, new_bus):
+        bus = service.getBus()
+        bus.unassignService(service)
+        service.assignBus(new_bus)
+
+
+    def switch_driver(self, service, new_driver):
+        driver = service.getDriver()
+        driver.unassignService(service)
+        service.assignDriver(new_driver)
+
     def isOverlapping(self, s1, s2):
         s1_start = s1.getStartTime()
         s1_dur = s1.getDurationMinutes()

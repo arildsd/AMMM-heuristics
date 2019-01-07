@@ -23,3 +23,6 @@ class Bus(object):
 
     def getServicesAssigned(self):
         return self._servicesAssigned
+
+    def unassignService(self, service):
+        self._servicesAssigned.remove(service)

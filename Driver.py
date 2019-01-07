@@ -15,3 +15,6 @@ class Driver(object):
 
     def appendService(self, service):
         self._servicesAssigned.append(service)
+
+    def unassignService(self, service):
+        self._servicesAssigned.remove(service)

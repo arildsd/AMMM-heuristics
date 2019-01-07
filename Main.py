@@ -5,7 +5,7 @@ import sys
 from DATParser import DATParser
 from ValidateConfig import ValidateConfig
 from Greedy import Greedy
-from GRASP import GRASP
+#from GRASP import GRASP
 from Problem import Problem
 #from Solution import Solution
 
@@ -16,12 +16,14 @@ def run():
         argp.add_argument('configFile', help='configuration file path')
         args = argp.parse_args()
 
+
         print 'AMMM Lab Heuristics'
         print '-------------------'
 
         print 'Reading Config file %s...' % args.configFile
         config = DATParser.parse(args.configFile)
-        ValidateConfig.validate(config)
+
+        #ValidateConfig.validate(config)
 
         print 'Reading Input Data file %s...' % config.inputDataFile
         inputData = DATParser.parse(config.inputDataFile)
@@ -35,22 +37,26 @@ def run():
             solver = None
             solution = None
             if config.solver == 'Greedy':
+                print 'Greedy solving'
                 greedySolver = Greedy(config, problem)
-                candidates = greedySolver.computeCandidates()
-                busCandidates = candidates[0]
-                driverCandidates = candidates[1]
-                solutionBuses = greedySolver.solveBuses(busCandidates)
-                solutionDrivers = greedySolver.solveDrivers(driverCandidates)
+                solutionGreedy = greedySolver.computeCandidates()
+                candidates = solutionGreedy[0]
+                cost = solutionGreedy[1]
+                for candService in candidates:
+                    print candService.getBus()
+                    print candService.getDriver()
+                print cost
+
             elif config.solver == 'GRASP':
-                solver = GRASP()
+                #solver = GRASP()
                 solution = solver.solve(config, problem)
 
             solution.saveToFile(config.solutionFile)
         else:
             print 'Instance is infeasible.'
-            solution = Solution.createEmptySolution(config, problem)
-            solution.makeInfeasible()
-            solution.saveToFile(config.solutionFile)
+            #solution = Solution.createEmptySolution(config, problem)
+            #solution.makeInfeasible()
+            #solution.saveToFile(config.solutionFile)
 
         return (0)
     except Exception as e:

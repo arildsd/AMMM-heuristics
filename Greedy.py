@@ -1,5 +1,4 @@
 from Solver import Solver
-import numpy as np
 
 
 # Greedy class inherits from solver
@@ -38,29 +37,31 @@ class Greedy(Solver):
 
     def computeCandidates(self):
         sortedBuses = sorted(self.buses, key=lambda buss: buss.getEurosPerKm() + buss.getEurosPerMinute(), reverse=True)
-        sortedServices = sorted(self.services, key=lambda serv: serv.getPassengerNumber(), reverse=True)
+        sortedServices = sorted(self.services, key=lambda serv: serv.getPassengerNumber(), reverse=False)
 
         # Assign buses to services
         for service in sortedServices:
             for bus in sortedBuses:
-                if self.checkAssignment(service, bus):
+                if self.checkBusAssignment(service, bus):
                     service.assignBus(bus)
                     bus.appendService(service)
                     break
 
-        sortedDrivers = sorted(self.buses, key=lambda d: d.getMaximumWorkingMinutes(), reverse=True)
+        sortedDrivers = sorted(self.drivers, key=lambda d: d.getMaximumWorkingMinutes(), reverse=True)
         sortedServices = sorted(self.services, key=lambda serv: serv.getDurationMinutes(), reverse=True)
 
         # Assign drivers to services
         for service in sortedServices:
             for driver in sortedDrivers:
                 if self.checkDriverAssignment(service, driver):
-                    service.assignDriver(driver.getId())
+                    service.assignDriver(driver)
                     driver.appendService(service)
                     break
 
+        return [self.services, self.calculateCosts()]
+
     def checkBusAssignment(self, service, bus):
-        if service.getBusId() != '':
+        if service.getBus() != '':
             return False
         if bus.getCapacity() < service.getPassengerNumber():
             return False
@@ -74,23 +75,40 @@ class Greedy(Solver):
 
         overlappingServices = self.overlapping_dict.get(service)
         for service in overlappingServices:
-            if service.getBusId() == bus.getId():
+            if service.getBus() == bus:
                 return False
 
         busesAssigned = []
         for service in self.services:
-            if service.getBusId != '' and (service.getBusId() not in busesAssigned):
-                busesAssigned.append(service.getBusId())
-
+            if service.getBus != '' and (service.getBus() not in busesAssigned):
+                busesAssigned.append(service.getBus())
         if len(busesAssigned) + 1 > self.maxBuses:
             return False
 
         return True
 
+    def calculateCosts(self):
+        busCost = 0.0
+        driverCost = 0.0
+        for driver in self.drivers:
+            totalWorkedMinutes = 0.0
+            for s in driver.getServicesAssigned():
+                totalWorkedMinutes += s.getDurationMinutes()
+                if totalWorkedMinutes > self.BM:
+                    driverCost += (totalWorkedMinutes - self.BM) * self.CEM
+                    driverCost += self.BM * self.CBM
+                else:
+                    driverCost += self.CBM * totalWorkedMinutes
+        for bus in self.buses:
+            for s in bus.getServicesAssigned():
+                busCost += bus.getEurosPerMinute() * s.getDurationMinutes() + bus.getEurosPerKm() * s.getDurationKm()
+
+        return busCost + driverCost
+
 
     def checkDriverAssignment(self, service, driver):
         # Check if the service already have a driver
-        if service.getDriverId() != '':
+        if service.getDriver() != '':
             return False
 
         # Constraint 3
@@ -102,7 +120,7 @@ class Greedy(Solver):
 
         overlappingServices = self.overlapping_dict.get(service)
         for service in overlappingServices:
-            if service.getDriverId() == driver.getId():
+            if service.getDriver() == driver:
                 return False
         return True
 

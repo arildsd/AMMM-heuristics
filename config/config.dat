@@ -1,8 +1,8 @@
 # --- Common specific parameters ------------------------------------------------------------------------------
-inputDataFile        = InstanceGenerator/instances/instance0.8_0.dat;        # Input DAT file
+inputDataFile        = InstanceGenerator/instances/instanceExample.dat;        # Input DAT file
 solutionFile         = solutions/solution1.sol; # Output DAT file (solution)
 solver               = Greedy;             # Supported solvers: Greedy / GRASP
-maxExecTime          = 20.0;                   # Maximum execution time in seconds
+maxExecTime          = 1000.0;                   # Maximum execution time in seconds
 
 # --- Greedy specific parameters ------------------------------------------------------------------------------
 # Does not has specific parameters

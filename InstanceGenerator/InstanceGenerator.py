@@ -123,8 +123,8 @@ class InstanceGenerator(object):
 
             fInstance.write('max_d=[%s];\n' % (' '.join(map(str, max_d))))
 
-            fInstance.write('CBM=%d;\n' % CBM)
-            fInstance.write('CEM=%d;\n' % CEM)
+            fInstance.write('CBM=%f;\n' % CBM)
+            fInstance.write('CEM=%f;\n' % CEM)
             fInstance.write('BM=%d;\n' % BM)
 
             fInstance.close()

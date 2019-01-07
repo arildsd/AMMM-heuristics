@@ -10,6 +10,10 @@ class Greedy(Solver):
         self.services = problem.services
         self.buses = problem.buses
         self.drivers = problem.drivers
+        self.maxBuses = problem.maxBuses
+        self.BM = problem.BM
+        self.CBM = problem.CBM
+        self.CEM = problem.CEM
         self.overtime = []
         self.assignedBus = []
         self.overlapping_dict = self.computeOverlapping()
@@ -43,7 +47,6 @@ class Greedy(Solver):
                     bus.appendService(service)
                     break
 
-
     def checkBusAssignment(self, service, bus):
         if service.getBusId() != '':
             return False
@@ -61,6 +64,14 @@ class Greedy(Solver):
         for service in overlappingServices:
             if service.getBusId() == bus.getId():
                 return False
+
+        busesAssigned = []
+        for service in self.services:
+            if service.getBusId != '' and (service.getBusId() not in busesAssigned):
+                busesAssigned.append(service.getBusId())
+
+        if len(busesAssigned) + 1 > self.maxBuses:
+            return False
 
         return True
 

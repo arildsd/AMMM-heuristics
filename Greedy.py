@@ -1,4 +1,6 @@
 from Solver import Solver
+import numpy as np
+
 
 # Greedy class inherits from solver
 
@@ -76,7 +78,7 @@ class Greedy(Solver):
     def solveBuses(self, busCandidates):
         busSolutionSet = []
 
-    def solveDrivers(self, driverCandidates):
-        driverSolutionSet = []
 
+    def solveDrivers(self, driverCandidates):
+        pass
 

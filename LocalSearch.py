@@ -10,7 +10,7 @@ class BusChange():
 class DriverChange():
     def __init__(self, service, driver):
         self.service = service
-        self.new_bus = driver
+        self.new_driver = driver
 
 
 class LocalSearch():
@@ -31,17 +31,46 @@ class LocalSearch():
         services = solution.services
         drivers = solution.drivers
         # Explore in a first improvement method
-        for service in random.shuffle(services):
-            for driver in random.shuffle(drivers):
+        random.shuffle(services)
+        random.shuffle(drivers)
+        for service in services:
+            for driver in drivers:
                 new_solution = copy.deepcopy(solution)
                 new_solution.checkDriverAssignment(service, driver)
                 change = DriverChange(service, driver)
-                new_solution.switch_driver(change)
+                new_solution = self.createNeighborSolution(new_solution, driver_change=change)
                 if new_solution.calculateCosts() < best_solution_cost:
+                    new_solution.validate_service_assignment()
                     return new_solution
         # No improvement was found
         return solution
 
+    def exploreNeighborhoodBus(self, solution):
+        copy_solution = copy.deepcopy(solution)
+        best_solution_cost = copy_solution.calculateCosts()
+        services = copy_solution.services
+        buses = copy_solution.buses
+        # Explore in a first improvement method
+        random.shuffle(services)
+        random.shuffle(buses)
+        for service in services:
+            for bus in buses:
+                new_solution = copy.deepcopy(copy_solution)
+                new_solution.checkBusAssignment(service, bus)
+                change = BusChange(service, bus)
+                new_solution = self.createNeighborSolution(new_solution, bus_change=change)
+                if new_solution.calculateCosts() < best_solution_cost:
+                    new_solution.validate_service_assignment()
+                    return new_solution
+        # No improvement was found
+        return solution
+
+    def exploreNeighborhoodMixed(self, solution):
+        pick = random.randint(-1, 1)
+        if pick == 0:
+            return self.exploreNeighborhoodDriver(solution)
+        else:
+            return self.exploreNeighborhoodBus(solution)
 
 
 

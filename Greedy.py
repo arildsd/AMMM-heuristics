@@ -20,13 +20,16 @@ class Greedy(Solver):
     def switch_bus(self, service, new_bus):
         bus = service.getBus()
         bus.unassignService(service)
+        new_bus.appendService(service)
         service.assignBus(new_bus)
 
 
     def switch_driver(self, service, new_driver):
         driver = service.getDriver()
         driver.unassignService(service)
+        new_driver.appendService(service)
         service.assignDriver(new_driver)
+
 
     def isOverlapping(self, s1, s2):
         s1_start = s1.getStartTime()
@@ -47,7 +50,7 @@ class Greedy(Solver):
         return overlapping_dict
 
     def computeCandidates(self):
-        sortedBuses = sorted(self.buses, key=lambda buss: buss.getEurosPerKm() + buss.getEurosPerMinute(), reverse=True)
+        sortedBuses = sorted(self.buses, key=lambda buss: buss.getCapacity(), reverse=False)
         sortedServices = sorted(self.services, key=lambda serv: serv.getPassengerNumber(), reverse=False)
 
         # Assign buses to services
@@ -69,10 +72,12 @@ class Greedy(Solver):
                     driver.appendService(service)
                     break
 
+        self.validate_service_assignment()
+
         return [self.services, self.calculateCosts()]
 
     def checkBusAssignment(self, service, bus):
-        if service.getBus() != '':
+        if service.getBus() is not None:
             return False
         if bus.getCapacity() < service.getPassengerNumber():
             return False
@@ -98,6 +103,13 @@ class Greedy(Solver):
 
         return True
 
+    def validate_service_assignment(self):
+        for service in self.services:
+            if service.getBus() is None:
+                raise Exception("A service does not have a bus assigned after the greedy step.")
+            if service.getDriver() is None:
+                raise Exception("A service does not have a driver assigned after the greedy step.")
+
     def calculateCosts(self):
         busCost = 0.0
         driverCost = 0.0
@@ -119,7 +131,7 @@ class Greedy(Solver):
 
     def checkDriverAssignment(self, service, driver):
         # Check if the service already have a driver
-        if service.getDriver() != '':
+        if service.getDriver() is not None:
             return False
 
         # Constraint 3

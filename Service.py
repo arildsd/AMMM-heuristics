@@ -1,8 +1,8 @@
 class Service(object):
     def __init__(self, serviceId, passengerNumber, startTime, durationMinutes, durationKm):
         self._serviceId = serviceId
-        self._bus = ''
-        self._driver = ''
+        self._bus = None
+        self._driver = None
         self._passengerNumber = passengerNumber
         self._startTime = startTime
         self._durationMinutes = durationMinutes
@@ -18,7 +18,7 @@ class Service(object):
         return (self._bus)
 
     def getDriver(self):
-        return (self._driver)
+        return self._driver
 
     def getPassengerNumber(self):
         return(self._passengerNumber)
